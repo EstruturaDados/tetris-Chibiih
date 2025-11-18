@@ -19,7 +19,33 @@ int main() {
     //      0 - Sair
     // - A cada remoção, insira uma nova peça ao final da fila.
 
+define MAX 5
 
+typedef struct {
+    char nome;
+    int id;
+} Peca;
+//fila circular
+typedef struct {
+    Peca itens[MAX]
+    int inicio;
+    int fim;
+    int tamanho;
+} Fila;
+
+void inicializarFila(Fila *f) {
+    f->inicio = 0;
+    f->fim = -1;
+    f->tamanho = 0;
+}
+
+int filaCheia(Fila *f) {
+    return f->tamanho == MAX;
+}
+
+int filaVazia(Fila *f) {
+    return f->tamanho == 0;
+}
 
     // 🧠 Nível Aventureiro: Adição da Pilha de Reserva
     //
