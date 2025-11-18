@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 // Desafio Tetris Stack
 // Tema 3 - Integração de Fila e Pilha
@@ -46,6 +48,58 @@ int filaCheia(Fila *f) {
 int filaVazia(Fila *f) {
     return f->tamanho == 0;
 }
+
+//gerando novas peças
+Peca gerarPeca() {
+static int contadorID = 0;
+char tipos[4] = {'I', 'O', 'T', 'L'};
+
+Peca p;
+p.nome = tipos[rand() % 4];
+p.id = contadorID++;
+
+
+return p;
+}
+
+//enqueue
+void enfileirar(Fila *f, Peca p) {
+if (filaCheia(f)) {
+printf("A fila está cheia! Não é possível inserir nova peça.");
+return;
+}
+
+f->fim = (f->fim + 1) % MAX;
+f->itens[f->fim] = p;
+f->tamanho++;
+
+printf("Peça [%c %d] inserida com sucesso!", p.nome, p.id);
+}
+
+//dequeue
+Peca desenfileirar(Fila *f) {
+if (filaVazia(f)) {
+printf("A fila está vazia! Não há peças para jogar.");
+Peca vazia = {'-', -1};
+return vazia;
+}
+
+Peca removida = f->itens[f->inicio];
+f->inicio = (f->inicio + 1) % MAX;
+f->tamanho--;
+
+printf("Peça [%c %d] jogada!", removida.nome, removida.id);
+return removida;
+}
+
+//exibindo a fila
+void exibirFila(Fila *f) {
+printf("Fila de peças:");
+if (filaVazia(f)) {
+printf("[vazia]");
+return;
+}
+
 
     // 🧠 Nível Aventureiro: Adição da Pilha de Reserva
     //
