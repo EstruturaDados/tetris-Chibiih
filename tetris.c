@@ -6,9 +6,6 @@
 // Tema 3 - Integração de Fila e Pilha
 // Este código inicial serve como base para o desenvolvimento do sistema de controle de peças.
 // Use as instruções de cada nível para desenvolver o desafio.
-
-int main() {
-
     // 🧩 Nível Novato: Fila de Peças Futuras
     //
     // - Crie uma struct Peca com os campos: tipo (char) e id (int).
@@ -21,15 +18,17 @@ int main() {
     //      0 - Sair
     // - A cada remoção, insira uma nova peça ao final da fila.
 
-define MAX 5
+    #define MAX 5
 
 typedef struct {
     char nome;
     int id;
 } Peca;
+
 //fila circular
+
 typedef struct {
-    Peca itens[MAX]
+    Peca itens[MAX];
     int inicio;
     int fim;
     int tamanho;
@@ -58,14 +57,13 @@ Peca p;
 p.nome = tipos[rand() % 4];
 p.id = contadorID++;
 
-
 return p;
 }
 
 //enqueue
 void enfileirar(Fila *f, Peca p) {
 if (filaCheia(f)) {
-printf("A fila está cheia! Não é possível inserir nova peça.");
+printf("A fila está cheia! Não é possível inserir nova peça.\n");
 return;
 }
 
@@ -73,13 +71,13 @@ f->fim = (f->fim + 1) % MAX;
 f->itens[f->fim] = p;
 f->tamanho++;
 
-printf("Peça [%c %d] inserida com sucesso!", p.nome, p.id);
+printf("Peça [%c %d] inserida com sucesso!\n", p.nome, p.id);
 }
 
 //dequeue
 Peca desenfileirar(Fila *f) {
 if (filaVazia(f)) {
-printf("A fila está vazia! Não há peças para jogar.");
+printf("A fila está vazia! Não há peças para jogar.\n");
 Peca vazia = {'-', -1};
 return vazia;
 }
@@ -88,16 +86,68 @@ Peca removida = f->itens[f->inicio];
 f->inicio = (f->inicio + 1) % MAX;
 f->tamanho--;
 
-printf("Peça [%c %d] jogada!", removida.nome, removida.id);
+printf("Peça [%c %d] jogada!\n", removida.nome, removida.id);
 return removida;
 }
 
 //exibindo a fila
 void exibirFila(Fila *f) {
-printf("Fila de peças:");
+printf("\nFila de peças:\n");
 if (filaVazia(f)) {
-printf("[vazia]");
+printf("[vazia]\n");
 return;
+}
+
+int idx = f->inicio;
+    for (int i = 0; i < f->tamanho; i++) {
+        Peca p = f->itens[idx];
+        printf("[%c %d] ", p.nome, p.id);
+        idx = (idx + 1) % MAX;
+    }
+    printf("\n");
+}
+
+int main() {
+    srand(time(NULL));
+
+    Fila fila;
+    inicializarFila(&fila);
+
+    // Inicializar com 5 peças
+    for (int i = 0; i < MAX; i++) {
+        enfileirar(&fila, gerarPeca());
+    }
+
+    int opcao;
+
+    do {
+        exibirFila(&fila);
+
+        printf("\nOpções:\n");
+        printf("1 - Jogar peça (dequeue)\n");
+        printf("2 - Inserir nova peça (enqueue)\n");
+        printf("0 - Sair\n");
+        printf("Escolha: ");
+
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                desenfileirar(&fila);
+                break;
+            case 2:
+                enfileirar(&fila, gerarPeca());
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida! Tente novamente.\n");
+        }
+
+    } while (opcao != 0);
+
+    return 0;
 }
 
 
@@ -130,7 +180,4 @@ return;
     //      4 - Trocar peça da frente com topo da pilha
     //      5 - Trocar 3 primeiros da fila com os 3 da pilha
 
-
-    return 0;
-}
 
